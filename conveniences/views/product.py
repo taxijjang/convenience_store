@@ -23,8 +23,8 @@ class ProductListView(generics.ListAPIView):
     - emart24
     - seven_eleven
     - gs25
-    - ministop
     """
+    # TODO: ministop추가 해야됨
     permission_classes = (permissions.AllowAny,)
     queryset = Product.objects.all()
     serializer_class = ProductListSerializer
@@ -41,7 +41,6 @@ class ProductListView(generics.ListAPIView):
             queryset = queryset.filter(store=store)
         if title:
             queryset = queryset.filter(title__icontains=title)
-
         if sale_type:
             queryset = queryset.filter(sale_type=sale_type)
         # 날짜 필터링
@@ -49,6 +48,8 @@ class ProductListView(generics.ListAPIView):
             Q(year=year)
             & Q(month=month)
         )
+        if order:
+            queryset = queryset.order_by("abc")
 
         return queryset
 
@@ -61,6 +62,7 @@ class ProductListView(generics.ListAPIView):
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
                 description="편의점 종류",
+                enum=["cu", "emart24", "seven_eleven", "gs25"],
             ),
             OpenApiParameter(
                 "title",
@@ -73,6 +75,14 @@ class ProductListView(generics.ListAPIView):
                 OpenApiTypes.STR,
                 OpenApiParameter.QUERY,
                 description="할인 타입",
+                enum=["1+1", "2+1", "3+1", "4+1", "할인상품", "증정상품"],
+            ),
+            OpenApiParameter(
+                "order",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                description="정렬 방법",
+                enum=["price", "-price", ]
             ),
         ],
     )
