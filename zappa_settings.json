@@ -5,6 +5,12 @@
         "profile_name": "default",
         "project_name": "convenience",
         "runtime": "python3.6",
-        "s3_bucket": "zappa-convenience"
+        "s3_bucket": "zappa-convenience",
+        "memory_size": 128,
+        "timeout_seconds": 30,
+        "vpc_config": {
+            "SubnetIds": ["subnet-c195999a"],
+            "SecurityGroupIds": ["sg-c384038b"]
+        }
     }
 }
